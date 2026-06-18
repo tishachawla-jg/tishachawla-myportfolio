@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tisha Chawla &middot; Software engineer, AI agents</title>
+<meta name="description" content="Tisha Chawla is a software engineer at Microsoft working on AI agents: durable state, reproducible runs, and self-healing workflows. Speaker at the AI Engineer World's Fair 2026." />
+<meta property="og:title" content="Tisha Chawla &middot; Software engineer, AI agents" />
+<meta property="og:description" content="Software engineer at Microsoft working on the reliability of AI agents. Speaker at the AI Engineer World's Fair 2026." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<script>document.documentElement.classList.add('has-js');</script>
+
+<style>
+  :root {
+    --bg: #ffffff; --bg-alt: #f6f7f9; --surface: #ffffff;
+    --text: #0e1014; --text-muted: #555c68; --text-faint: #6b7280;
+    --border: #e8eaef;
+    --accent: #c8396b; --accent-soft: #fbe9f0; --ok: #15a05a;
+    --radius: 16px; --max: 980px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0c0f; --bg-alt: #12151a; --surface: #13171d;
+    --text: #f2f4f7; --text-muted: #9aa3b0; --text-faint: #7a828f;
+    --border: #232831;
+    --accent: #f08aaa; --accent-soft: #2a1622; --ok: #34c172;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.65; -webkit-font-smoothing: antialiased; transition: background .25s ease, color .25s ease; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--mono); }
+  main#top, section[id] { scroll-margin-top: 82px; }
+
+  .has-js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .has-js .reveal.in { opacity: 1; transform: none; }
+  .has-js .stg { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .has-js .stg.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .has-js .reveal, .has-js .stg { opacity: 1 !important; transform: none !important; transition: none !important; } html { scroll-behavior: auto; } }
+
+  header.nav { position: sticky; top: 0; z-index: 60; backdrop-filter: saturate(180%) blur(14px); background: color-mix(in srgb, var(--bg) 78%, transparent); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; }
+  .brand span { color: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 22px; }
+  .nav-links { display: flex; align-items: center; gap: 22px; }
+  .nav-links a { font-size: 14.5px; color: var(--text-muted); transition: color .15s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .icon-btn { background: var(--bg-alt); border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; transition: background .15s; }
+  .icon-btn:hover { background: var(--accent-soft); }
+  .nav-toggle { display: none; }
+  .mobile-menu { display: none; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .mobile-menu a { display: block; padding: 13px 24px; font-size: 16px; color: var(--text-muted); border-top: 1px solid var(--border); }
+  .mobile-menu a:first-child { border-top: none; }
+  @media (max-width: 760px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: inline-flex; }
+    .mobile-menu.open { display: block; position: sticky; top: 64px; z-index: 55; }
+  }
+
+  .hero { padding: 74px 0 50px; }
+  .hero-grid { display: grid; grid-template-columns: 1.5fr 0.9fr; gap: 50px; align-items: start; }
+  @media (max-width: 780px) { .hero-grid { grid-template-columns: 1fr; gap: 30px; } .hero { padding: 42px 0 34px; } }
+  .status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); background: var(--bg-alt); border: 1px solid var(--border); padding: 6px 13px; border-radius: 999px; margin-bottom: 22px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); }
+  .hero h1 { font-size: 48px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 660; }
+  .hero p.lead { font-size: 18px; color: var(--text-muted); margin-top: 18px; max-width: 48ch; }
+  .hero p.lead .grad { color: var(--accent); font-weight: 500; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 12px; font-size: 15px; font-weight: 500; border: 1px solid var(--border); transition: transform .12s, background .15s, border-color .15s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.ghost { background: var(--surface); color: var(--text); }
+  .btn.ghost:hover { border-color: var(--accent); }
+  @media (max-width: 760px) { .hero h1 { font-size: 35px; } }
+
+  .hero-side { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  @media (max-width: 780px) { .hero-side { align-items: flex-start; } }
+  .curr { width: 100%; display: flex; flex-direction: column; gap: 9px; padding: 16px 18px; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 14px; }
+  .curr-label { font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; }
+  .curr-item { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 500; }
+  .curr-item .svg-i { color: var(--accent); flex-shrink: 0; }
+  .avatar-lg { width: 152px; height: 152px; border-radius: 50%; object-fit: cover; object-position: center top; border: 2px solid var(--bg); box-shadow: 0 0 0 5px var(--accent-soft); display: block; }
+  .avatar-fallback { width: 152px; height: 152px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: none; align-items: center; justify-content: center; font-size: 52px; font-weight: 600; box-shadow: 0 0 0 5px var(--accent-soft); }
+
+  section.block { padding: 68px 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+  .sec-num { font-family: var(--mono); font-size: 12.5px; color: var(--accent); }
+  .sec-label { font-size: 12.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+  .sec-title { font-size: 29px; letter-spacing: -0.025em; font-weight: 640; margin-bottom: 16px; }
+  .prose { font-size: 17.5px; color: var(--text-muted); max-width: 66ch; }
+  .prose + .prose { margin-top: 18px; }
+  .prose strong { color: var(--text); font-weight: 600; }
+  .divider { border: none; border-top: 1px solid var(--border); }
+
+  .quote { border-left: 3px solid var(--accent); padding: 4px 0 4px 22px; margin: 26px 0 4px; max-width: 62ch; }
+  .quote p { font-size: 20px; line-height: 1.5; letter-spacing: -0.012em; color: var(--text); font-weight: 500; }
+  .quote cite { display: block; margin-top: 10px; font-size: 14px; color: var(--text-faint); font-style: normal; }
+
+  .facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border); }
+  .fact { font-size: 14.5px; }
+  .fact .k { color: var(--text-faint); margin-right: 7px; }
+  .fact .v { color: var(--text); font-weight: 500; }
+
+  .pipe { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 26px; }
+  @media (max-width: 640px) { .pipe { grid-template-columns: repeat(2, 1fr); } }
+  .stage { background: var(--surface); border: 1px solid var(--border); border-radius: 13px; padding: 15px 13px; text-align: center; }
+  .stage .n { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .stage h5 { font-size: 14px; font-weight: 580; margin-top: 4px; letter-spacing: -0.01em; }
+  .stage p { font-size: 12px; color: var(--text-faint); margin-top: 4px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 26px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 13px; padding: 18px 20px; transition: transform .18s ease, border-color .18s ease; }
+  .card:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .card .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 13px; }
+  .card h4 { font-size: 15.5px; font-weight: 580; letter-spacing: -0.01em; }
+  .card p { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; }
+
+  .manifesto { font-size: 18px; color: var(--text-muted); max-width: 64ch; }
+  .rules { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .rule { font-size: 14px; color: var(--text); background: var(--bg-alt); border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; }
+  .rule b { color: var(--accent); font-weight: 600; }
+
+  .beliefs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
+  @media (max-width: 640px) { .beliefs { grid-template-columns: 1fr; } }
+  .belief { display: flex; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 13px; padding: 18px 20px; transition: transform .18s ease, border-color .18s ease; }
+  .belief:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .belief .bn { font-family: var(--mono); font-size: 12.5px; color: var(--accent); padding-top: 3px; }
+  .belief h4 { font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em; }
+  .belief p { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; }
+
+  .featured { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 13px; }
+  .featured .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13.5px; color: var(--text-muted); }
+  .tag { font-size: 12px; font-weight: 600; padding: 4px 11px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .tag.up { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+  .featured h3 { font-size: 23px; letter-spacing: -0.018em; font-weight: 630; }
+  .featured .desc { color: var(--text-muted); font-size: 16px; max-width: 66ch; }
+  .featured a.link { color: var(--accent); font-weight: 500; font-size: 15px; display: inline-flex; align-items: center; gap: 6px; }
+
+  .talk-item { display: flex; align-items: baseline; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .talk-item:last-child { border-bottom: none; }
+  .talk-date { font-family: var(--mono); font-size: 13px; color: var(--text-faint); min-width: 116px; }
+  .talk-body h4 { font-size: 16.5px; font-weight: 560; letter-spacing: -0.01em; }
+  .talk-body p { font-size: 14.5px; color: var(--text-muted); margin-top: 3px; }
+  .talk-body .where { color: var(--accent); }
+
+  .session-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 16px; }
+  .session { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 15px 18px; }
+  .session h5 { font-size: 14.5px; font-weight: 560; letter-spacing: -0.01em; }
+  .session p { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+
+  .blog { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); transition: padding-left .18s ease; }
+  .blog:hover { padding-left: 8px; }
+  .blog:hover h4 { color: var(--accent); }
+  .blog .bl-main h4 { font-size: 18px; font-weight: 560; letter-spacing: -0.015em; line-height: 1.35; transition: color .15s; }
+  .blog .bl-main .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+  .blog .bl-main .t { font-size: 12px; color: var(--text-faint); }
+  .blog .bl-meta { text-align: right; white-space: nowrap; }
+  .blog .bl-meta .date { font-family: var(--mono); font-size: 12.5px; color: var(--text-faint); display: block; }
+  .blog .bl-meta .read { font-size: 12px; color: var(--text-faint); }
+  @media (max-width: 560px) { .blog { flex-direction: column; gap: 8px; } .blog .bl-meta { text-align: left; } }
+  .pubs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .pub-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; color: var(--text); background: var(--surface); border: 1px solid var(--border); padding: 10px 16px; border-radius: 11px; transition: border-color .15s, color .15s, transform .15s; }
+  .pub-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .news { background: var(--accent); color: #fff; border-radius: 20px; padding: 42px 34px; text-align: center; }
+  [data-theme="dark"] .news { background: var(--accent-soft); color: var(--text); border: 1px solid var(--border); }
+  .news h3 { font-size: 25px; letter-spacing: -0.02em; font-weight: 640; }
+  .news p { margin-top: 10px; opacity: .92; font-size: 16px; }
+  .news form { display: flex; gap: 10px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+  .news input { padding: 13px 18px; border-radius: 12px; border: none; font-size: 15px; width: 290px; max-width: 100%; font-family: inherit; }
+  .news button { padding: 13px 26px; border-radius: 12px; border: none; cursor: pointer; background: #fff; color: var(--accent); font-weight: 600; font-size: 15px; font-family: inherit; transition: transform .12s; }
+  [data-theme="dark"] .news button { background: var(--accent); color: #fff; }
+  .news button:hover { transform: translateY(-1px); }
+  .news .hint { font-size: 12.5px; margin-top: 14px; opacity: .82; }
+  .news .done { font-size: 17px; margin-top: 8px; }
+
+  .contact-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .contact-card h3 { font-size: 21px; font-weight: 620; letter-spacing: -0.01em; }
+  .contact-card p { color: var(--text-muted); font-size: 15px; margin-top: 4px; }
+  .socials { display: flex; gap: 12px; }
+  .icon-link { width: 46px; height: 46px; border-radius: 13px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; transition: transform .15s, border-color .15s, color .15s; }
+  .icon-link:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--accent); }
+
+  footer { padding: 42px 0 58px; text-align: center; color: var(--text-faint); font-size: 14px; border-top: 1px solid var(--border); }
+  .svg-i { width: 1em; height: 1em; fill: currentColor; vertical-align: -0.1em; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand">Tisha Chawla<span>.</span></a>
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#focus">Focus</a>
+        <a href="#talks">Speaking</a>
+        <a href="#writing">Writing</a>
+        <a href="#contact">Contact</a>
+        <a href="#building">Building</a>
+      </nav>
+      <button class="icon-btn theme-btn" id="themeToggle" aria-label="Toggle dark mode">&#9789;</button>
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg class="svg-i" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#about">About</a>
+    <a href="#focus">Focus</a>
+    <a href="#talks">Speaking</a>
+    <a href="#writing">Writing</a>
+    <a href="#contact">Contact</a>
+    <a href="#building">Building</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <span class="status reveal"><span class="dot"></span> Speaking at AI Engineer World's Fair 2026</span>
+      <div class="hero-grid">
+      <div class="reveal">
+        <h1 class="stg">Tisha Chawla</h1>
+        <p class="lead stg">Software engineer at Microsoft. I work on making AI agents <span class="grad">reliable in the real world</span>, the part that decides whether they hold up outside a demo.</p>
+        <div class="cta-row stg">
+          <a href="#writing" class="btn primary">Read my writing</a>
+          <a href="#talks" class="btn ghost">See my talks</a>
+        </div>
+      </div>
+      <aside class="reveal hero-side">
+        <img class="avatar-lg" id="profilePhoto" src="profile.png" alt="Tisha Chawla" onerror="this.style.display='none';document.getElementById('photoFallback').style.display='flex';" />
+        <div class="avatar-fallback" id="photoFallback">TC</div>
+        <div class="curr">
+          <span class="curr-label">Currently</span>
+          <span class="curr-item"><svg class="svg-i" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z"/></svg> Software Engineer, Microsoft</span>
+          <span class="curr-item"><svg class="svg-i" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v4a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5Zm-7 9a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2a5 5 0 0 1-10 0H5Z"/></svg> Speaker, AI Engineer World's Fair 2026</span>
+          <span class="curr-item"><svg class="svg-i" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3Zm0 13.5L5 12.8V14l7 3.8 7-3.8v-1.2l-7 3.7Z"/></svg> Applied ML researcher &middot; 150+ citations</span>
+        </div>
+      </aside>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="about">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">01</span><span class="sec-label">About</span></div>
+      <p class="prose">I build data platform infrastructure at Microsoft, where my work sits where large-scale analytics meets agentic AI. Most of what I actually do is make agents boringly reliable: <strong>durable state</strong> so they don't forget, <strong>deterministic execution</strong> so a failure can be reproduced, and <strong>self-healing workflows</strong> that recover without someone getting paged at 2am.</p>
+      <p class="prose">I treat AI as something to architect, not just consume. The interesting problems usually aren't in the model, they're in the orchestration around it: how coding agents, reliability agents, and spec-driven workflows actually hold together once real traffic hits them, rather than in a tidy demo.</p>
+      <div class="quote">
+        <p>Requirements are no longer static documents. They are the first architectural control surface, where systems inherit intent before implementation begins.</p>
+        <cite>From my LinkedIn series on the agentic SDLC</cite>
+      </div>
+      <p class="prose">On the research side, I publish peer-reviewed applied-ML work with 150+ citations. And I do most of this in the open, through my blog, talks, and a running LinkedIn series.</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="focus">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">02</span><span class="sec-label">Focus</span></div>
+      <h2 class="sec-title">Agents across the lifecycle</h2>
+      <p class="prose">Reliability isn't one feature you bolt on at the end. It's something you engineer at every stage, from the moment a requirement is written to the moment an agent quietly recovers from an incident on its own.</p>
+
+      <div class="pipe">
+        <div class="stage stg"><span class="n">01</span><h5>Requirements</h5><p>Spec-driven dev</p></div>
+        <div class="stage stg"><span class="n">02</span><h5>Build</h5><p>SWE agents</p></div>
+        <div class="stage stg"><span class="n">03</span><h5>Test</h5><p>Testing agents</p></div>
+        <div class="stage stg"><span class="n">04</span><h5>Operate</h5><p>SRE agents</p></div>
+        <div class="stage stg"><span class="n">05</span><h5>Scale</h5><p>Cost &amp; reliability</p></div>
+      </div>
+
+      <div class="cards">
+        <div class="card stg">
+          <div class="ic"><svg class="svg-i" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm0 2 4 4h-4V4ZM8 13h8v2H8v-2Zm0 4h8v2H8v-2Zm0-8h3v2H8V9Z"/></svg></div>
+          <h4>Spec-driven development</h4>
+          <p>Requirements as the first control surface. I work with Spec Kit across greenfield and brownfield so intent flows cleanly into what gets built.</p>
+        </div>
+        <div class="card stg">
+          <div class="ic"><svg class="svg-i" viewBox="0 0 24 24"><path d="m8 16-4-4 4-4 1.4 1.4L6.8 12l2.6 2.6L8 16Zm8 0-1.4-1.4 2.6-2.6-2.6-2.6L16 8l4 4-4 4Z"/></svg></div>
+          <h4>SWE agents</h4>
+          <p>The Azure DevOps SWE Agent and custom agents: architecture, MCP integration, and automating pull request creation and implementation.</p>
+        </div>
+        <div class="card stg">
+          <div class="ic"><svg class="svg-i" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17Z"/></svg></div>
+          <h4>Testing agents</h4>
+          <p>Playwright Planner, Generator, and Healer agents that write and self-heal test cases automatically, in VS Code and Azure Foundry.</p>
+        </div>
+        <div class="card stg">
+          <div class="ic"><svg class="svg-i" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4Zm-1 14-4-4 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6Z"/></svg></div>
+          <h4>SRE &amp; reliability agents</h4>
+          <p>The Azure SRE Agent: incident automation, ICM and DevOps integration, and sub-agent builder workflows that keep things dependable.</p>
+        </div>
+        <div class="card stg">
+          <div class="ic"><svg class="svg-i" viewBox="0 0 24 24"><path d="M4 4h16v2H4V4Zm2 4h12l-1 12H7L6 8Zm3 3v6h2v-6H9Zm4 0v6h2v-6h-2Z"/></svg></div>
+          <h4>AI-first repositories</h4>
+          <p>Making repos genuinely agent-ready through structure, docs, and context engineering, including Microsoft's first-party Agency platform.</p>
+        </div>
+        <div class="card stg">
+          <div class="ic"><svg class="svg-i" viewBox="0 0 24 24"><path d="M3 13h2v8H3v-8Zm4-6h2v14H7V7Zm4 3h2v11h-2V10Zm4-7h2v18h-2V3Zm4 9h2v9h-2v-9Z"/></svg></div>
+          <h4>Agent economics</h4>
+          <p>FinOps and token optimization for non-deterministic agents, so the bill stays visible and under control as systems scale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="talks">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">03</span><span class="sec-label">Speaking</span></div>
+      <h2 class="sec-title">Talks</h2>
+      <p class="prose">I share what I'm building with engineering audiences inside and outside Microsoft.</p>
+
+      <div class="featured" style="margin-top: 24px;">
+        <div class="meta">
+          <span class="tag up">Upcoming</span>
+          <span>AI Engineer World's Fair 2026</span>
+          <span>&middot;</span>
+          <span class="mono">01 Jul 2026</span>
+          <span>&middot;</span>
+          <span>San Francisco</span>
+        </div>
+        <h3>FinOps for AI Agents: Who Spent All the Tokens?</h3>
+        <p class="desc">A practical look at cost management and token optimization for non-deterministic agents: where the spend actually goes, how to make it visible, and how to design agents that stay economical as they scale.</p>
+        <a href="https://www.ai.engineer/worldsfair" class="link" target="_blank" rel="noopener">Conference details &#8594;</a>
+      </div>
+
+      <div style="margin-top: 26px;">
+        <div class="talk-item stg">
+          <div class="talk-date">2026 &middot; Online</div>
+          <div class="talk-body">
+            <h4>Your Agent Failed in Prod. Good Luck Reproducing It.</h4>
+            <p><span class="where">AI Engineer World's Fair 2026</span>, online track</p>
+          </div>
+        </div>
+        <div class="talk-item stg">
+          <div class="talk-date">20 May 2026</div>
+          <div class="talk-body">
+            <h4>Spec-Driven Development with Spec Kit</h4>
+            <p><span class="where">Microsoft APAC AI Forum</span></p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 18px; font-weight: 580; margin-top: 32px; letter-spacing: -0.01em;">AI Driven Engineering series, Microsoft</h3>
+      <p class="prose" style="font-size: 15px; margin-top: 8px;">Sessions I presented in Microsoft's internal AI Driven Engineering (AIDE) series, covering agents across the development lifecycle.</p>
+      <div class="session-list">
+        <div class="session stg"><h5>Azure DevOps SWE Agent</h5><p>Architecture, custom agents, MCP server integration, features, and prompting best practices.</p></div>
+        <div class="session stg"><h5>Azure SRE Agent</h5><p>Onboarding, incident automation, ICM and DevOps integration, and sub-agent builder workflows.</p></div>
+        <div class="session stg"><h5>Spec Kit, SWE Agent &amp; Playwright Testing Agents</h5><p>Brownfield migration with Spec Kit, automated PR creation, and Playwright Planner, Generator, and Healer agents.</p></div>
+        <div class="session stg"><h5>The Agency Platform &amp; AI-First Repos</h5><p>Microsoft's first-party agent platform and patterns for making repositories truly AI-first.</p></div>
+        <div class="session stg"><h5>GitHub Copilot CLI &amp; SDK with Liquid MCP</h5><p>Copilot SDK and CLI, MCP server integration, workflow handling, and compliance guidance with Liquid MCP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="beliefs">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">04</span><span class="sec-label">What I believe</span></div>
+      <h2 class="sec-title">A few convictions</h2>
+      <p class="prose">These aren't slogans. They're the lessons that keep showing up in my work, and they shape how I build.</p>
+      <div class="beliefs">
+        <div class="belief stg"><span class="bn">01</span><div><h4>Reliability is the product.</h4><p>With agents, the model is the easy part. Whether it holds up under real traffic is what people actually feel and remember.</p></div></div>
+        <div class="belief stg"><span class="bn">02</span><div><h4>If you can't reproduce it, you can't fix it.</h4><p>Non-determinism is the enemy of debugging. I design for reproducible runs so a prod failure is a lead, not a mystery.</p></div></div>
+        <div class="belief stg"><span class="bn">03</span><div><h4>Boring infrastructure wins.</h4><p>Durable state and self-healing workflows are unglamorous, but they're what separate a demo from a system you can trust.</p></div></div>
+        <div class="belief stg"><span class="bn">04</span><div><h4>Research and engineering belong together.</h4><p>The best systems come from both: rigour from research, pragmatism from shipping. I try to live in that overlap.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="philosophy">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">05</span><span class="sec-label">How I work</span></div>
+      <h2 class="sec-title">I build in the open</h2>
+      <p class="manifesto">The fastest way I've found to get good at something this new is to work on hard problems and then actually show the work, what shipped, what broke, and the messy reasoning in between. So I write the long post, give the talk, and publish the thing that isn't perfect yet.</p>
+      <div class="rules">
+        <span class="rule stg"><b>Build at the frontier</b> &middot; problems without settled answers</span>
+        <span class="rule stg"><b>Learn in the open</b> &middot; the process, not the highlight reel</span>
+        <span class="rule stg"><b>High signal</b> &middot; depth and evidence over buzzwords</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="writing">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">06</span><span class="sec-label">Writing</span></div>
+      <h2 class="sec-title">Why agents break, and how to fix it</h2>
+      <p class="prose">My blog goes deep on the hard parts of agent engineering: memory, reproducibility, and structure. A few recent ones:</p>
+      <div style="margin-top: 22px;">
+        <a class="blog stg" href="https://dev.to/tisha/why-agents-forget-5b46" target="_blank" rel="noopener">
+          <div class="bl-main">
+            <h4>Why Agents Forget</h4>
+            <div class="tags"><span class="t">#ai</span><span class="t">#machinelearning</span><span class="t">#llm</span><span class="t">#agents</span></div>
+          </div>
+          <div class="bl-meta"><span class="date">07 Jun 2026</span><span class="read">9 min read</span></div>
+        </a>
+        <a class="blog stg" href="https://dev.to/tisha/your-agent-failed-in-prod-good-luck-reproducing-it-56ci" target="_blank" rel="noopener">
+          <div class="bl-main">
+            <h4>Your Agent Failed in Prod. Good Luck Reproducing It.</h4>
+            <div class="tags"><span class="t">#ai</span><span class="t">#machinelearning</span><span class="t">#llm</span><span class="t">#testing</span></div>
+          </div>
+          <div class="bl-meta"><span class="date">03 Jun 2026</span><span class="read">23 min read</span></div>
+        </a>
+        <a class="blog stg" href="https://dev.to/tisha/spec-driven-development-when-structure-helps-and-when-it-becomes-tax-1f66" target="_blank" rel="noopener">
+          <div class="bl-main">
+            <h4>Spec-Driven Development: When Structure Helps and When It Becomes Tax</h4>
+            <div class="tags"><span class="t">#ai</span><span class="t">#llm</span><span class="t">#softwaredevelopment</span><span class="t">#dev</span></div>
+          </div>
+          <div class="bl-meta"><span class="date">01 Jun 2026</span><span class="read">11 min read</span></div>
+        </a>
+      </div>
+      <div class="pubs">
+        <a class="pub-link stg" href="https://dev.to/tisha" target="_blank" rel="noopener"><svg class="svg-i" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 4v8h2v-3l2 3h2l-2-3 2-3h-2l-2 3V8H7Z"/></svg> All posts on DEV</a>
+        <a class="pub-link stg" href="https://scholar.google.com/citations?hl=en&user=1RlfxgwAAAAJ" target="_blank" rel="noopener"><svg class="svg-i" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3Zm0 13.5L5 12.8V14l7 3.8 7-3.8v-1.2l-7 3.7Z"/></svg> Research on Google Scholar</a>
+        <a class="pub-link stg" href="https://www.linkedin.com/in/tisha-chawla-a944031a3" target="_blank" rel="noopener"><svg class="svg-i" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.5c0-1.3 0-3-1.83-3-1.83 0-2.11 1.43-2.11 2.9V21h-4V9Z"/></svg> The agentic SDLC series</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="content">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">07</span><span class="sec-label">Video</span></div>
+      <h2 class="sec-title">Tisha Talks Tech</h2>
+      <p class="prose">On YouTube I break down how agentic systems work, walk through real engineering problems, and share what I've picked up building at Microsoft.</p>
+      <div class="contact-card" style="margin-top: 24px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div class="ic" style="width: 50px; height: 50px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 24px;"><svg class="svg-i" viewBox="0 0 24 24"><path d="M23 12s0-3.4-.43-5.03a2.62 2.62 0 0 0-1.84-1.85C19.1 4.7 12 4.7 12 4.7s-7.1 0-8.73.42a2.62 2.62 0 0 0-1.84 1.85C1 8.6 1 12 1 12s0 3.4.43 5.03c.24.9.94 1.6 1.84 1.85 1.63.42 8.73.42 8.73.42s7.1 0 8.73-.42a2.62 2.62 0 0 0 1.84-1.85C23 15.4 23 12 23 12ZM9.75 15.27V8.73L15.5 12l-5.75 3.27Z"/></svg></div>
+          <div>
+            <h3 style="font-size: 19px;">Tisha Talks Tech</h3>
+            <p>AI agents, engineering deep dives, and career notes.</p>
+          </div>
+        </div>
+        <a href="https://www.youtube.com/@tisha_talks_tech?sub_confirmation=1" class="btn primary" target="_blank" rel="noopener">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="contact">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">08</span><span class="sec-label">Contact</span></div>
+      <div class="contact-card">
+        <div>
+          <h3>Let's talk</h3>
+          <p>Speaking invitations, collaborations, or just to say hi.</p>
+        </div>
+        <div class="socials">
+          <a class="icon-link" href="mailto:tishachawla5@gmail.com" aria-label="Email">
+            <svg class="svg-i" viewBox="0 0 24 24"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13A1.5 1.5 0 0 1 20.5 20h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2 .9v.2l8 5 8-5v-.2H4Zm16 2.3-7.4 4.6a1.2 1.2 0 0 1-1.2 0L4 8.7V18h16V8.7Z"/></svg>
+          </a>
+          <a class="icon-link" href="https://www.linkedin.com/in/tisha-chawla-a944031a3" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg class="svg-i" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.5c0-1.3 0-3-1.83-3-1.83 0-2.11 1.43-2.11 2.9V21h-4V9Z"/></svg>
+          </a>
+          <a class="icon-link" href="https://dev.to/tisha" target="_blank" rel="noopener" aria-label="DEV blog">
+            <svg class="svg-i" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 4v8h2v-3l2 3h2l-2-3 2-3h-2l-2 3V8H7Z"/></svg>
+          </a>
+          <a class="icon-link" href="https://www.youtube.com/@tisha_talks_tech" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg class="svg-i" viewBox="0 0 24 24"><path d="M23 12s0-3.4-.43-5.03a2.62 2.62 0 0 0-1.84-1.85C19.1 4.7 12 4.7 12 4.7s-7.1 0-8.73.42a2.62 2.62 0 0 0-1.84 1.85C1 8.6 1 12 1 12s0 3.4.43 5.03c.24.9.94 1.6 1.84 1.85 1.63.42 8.73.42 8.73.42s7.1 0 8.73-.42a2.62 2.62 0 0 0 1.84-1.85C23 15.4 23 12 23 12ZM9.75 15.27V8.73L15.5 12l-5.75 3.27Z"/></svg>
+          </a>
+          <a class="icon-link" href="https://scholar.google.com/citations?hl=en&user=1RlfxgwAAAAJ" target="_blank" rel="noopener" aria-label="Google Scholar">
+            <svg class="svg-i" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3Zm0 13.5L5 12.8V14l7 3.8 7-3.8v-1.2l-7 3.7Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="block" id="building">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="sec-num">09</span><span class="sec-label">Building</span></div>
+      <h2 class="sec-title">The Agent Plane</h2>
+      <p class="prose">An open-source effort focused on the infrastructure that makes AI agents reliable in the real world.</p>
+      <div class="featured" style="margin-top: 22px;">
+        <div class="meta">
+          <span class="tag">Open source</span>
+          <span>&middot;</span>
+          <span>Built with Susheem</span>
+        </div>
+        <h3>The Agent Plane</h3>
+        <p class="desc">Open infrastructure for running AI agents reliably, from durable state to reproducible execution. A work in progress, built in the open.</p>
+        <a href="https://github.com/theagentplane" class="link" target="_blank" rel="noopener">View on GitHub &#8594;</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">&copy; <span id="year"></span> Tisha Chawla &middot; Built and maintained by me</div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+
+    var btn = document.getElementById('themeToggle');
+    function setIcon() { btn.innerHTML = root.getAttribute('data-theme') === 'dark' ? '&#9788;' : '&#9789;'; }
+    setIcon();
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      setIcon();
+    });
+
+    var navToggle = document.getElementById('navToggle');
+    var mobileMenu = document.getElementById('mobileMenu');
+    navToggle.addEventListener('click', function () {
+      var open = mobileMenu.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { mobileMenu.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          en.target.classList.add('in');
+          en.target.querySelectorAll('.stg').forEach(function (k, i) { k.style.transitionDelay = Math.min(i * 65, 420) + 'ms'; k.classList.add('in'); });
+          io.unobserve(en.target);
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal, .stg').forEach(function (el) { el.classList.add('in'); });
+    }
+
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+    var secs = navLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+    if ('IntersectionObserver' in window && secs.length) {
+      var sio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            var id = en.target.id;
+            navLinks.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + id); });
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      secs.forEach(function (s) { sio.observe(s); });
+    }
+
+  })();
+</script>
+
+</body>
+</html>
